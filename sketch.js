@@ -230,13 +230,6 @@ function titleSize() {
     }
 }
 
-/*splash of color
-function animateColors() {
-    if (frameCount % 60 === 0) {
-        changeColor();
-    }
-}*/
-
 //creates new color 
 function changeColor() {
   currentColor = color(random(255), random(255), random(255));
