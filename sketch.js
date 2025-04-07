@@ -29,29 +29,32 @@ var stepSize = 2;
 //title size growth:
 var isShrinking = true; 
 
-//circle variables to accomplish assignment goals://////////////////////////////////////
+//circle variables to accomplish assignment goals:
 var circle1X = 1; 
 var circle1Y = 150;
-var sq1X = 1
-var sq1Y = 150
+var sq1X = 1;
+var sq1Y = 150;
 var circle2X = 300; 
 var circle2Y = 1;
-var sq2X = 300
-var sq2Y = 1
+var sq2X = 300;
+var sq2Y = 1;
 var circle3X = 1; //circle 3 moving diagonally
 var circle3Y = 1;
-circle1Speed = 1
-circle2Speed = 1
-circle3Speed = 1
-
+var circle1Speed;
+var circle2Speed;
+var circle3Speed;
+var circle1Color, circle2Color, circle3Color;
 
 function setup() {
     createCanvas(400, 400);
-    changeColor(); // Initialize with a random color
+    changeColor(); //initialize with a random color
+    circle1Color = color(random(255), random(255), random(255));
+    circle2Color = color(random(255), random(255), random(255));
+    circle3Color = color(random(255), random(255), random(255));
     //speed is randomized for moving objects
-    circle1Speed = random(1,3)
-    circle2Speed = random(1,3)
-    circle3Speed = random(1,3)
+    circle1Speed = random(1,3);
+    circle2Speed = random(1,3);
+    circle3Speed = random(1,3);
 }
 
 function draw() {
@@ -86,13 +89,17 @@ function draw() {
     point(rightEyeX, rightEyeY);
 
     //moving objects
-    fill(currentColor);
+    fill(circle1Color);
     circle(circle1X, circle1Y, 80);
+    fill(circle2Color);
     circle(circle2X, circle2Y, 50);
+    fill(circle3Color);
     circle(circle3X, circle3Y, 60);
-    square(sq1X, sq1Y, 10)
-    square(sq2X, sq2Y, 10)
+    
+    //squares
     fill(currentColor); 
+    square(sq1X, sq1Y, 10);
+    square(sq2X, sq2Y, 10);
     
     //title
     textSize(nameSize);
@@ -106,8 +113,6 @@ function draw() {
     animateName();
     titleSize();
     animateCircles();
-
-    /*animateColors();*/
 }
 
 //moves the eyes and keeps pupils within the eye
@@ -151,32 +156,35 @@ function resetRightEye() {
     rightEyeCirY = 90;
 }
 
-//animate circles////////////////////////////////////////////////////////////
+//animate circles
 function animateCircles() {
-  //circle1 back and forth along the x-axis
-  circle1X += circle1Speed;
-  if (circle1X >= 400 || circle1X <= 0) {
-      circle1Speed *= -1; //eeverse direction
-  }
-  sq1X += circle1Speed;
+    //circle1 back and forth along the x-axis
+    circle1X += circle1Speed;
+    if (circle1X >= 400 || circle1X <= 0) {
+        circle1Speed *= -1; //reverse direction
+        circle1Color = color(random(255), random(255), random(255)); // Change color on hit
+    }
+    sq1X += circle1Speed;
 
+    //circle2 back and forth along the y-axis
+    circle2Y += circle2Speed;
+    if (circle2Y >= 400 || circle2Y <= 0) {
+        circle2Speed *= -1; //reverse direction
+        circle2Color = color(random(255), random(255), random(255)); // Change color on hit
+    }
+    sq2Y += circle2Speed;
 
-  //circle2 back and forth along the x-axis
-  circle2Y += circle2Speed;
-  if (circle2Y >= 400 || circle2Y <= 0) {
-      circle2Speed *= -1; //reverse direction
-  }
-  sq2Y += circle2Speed;
-
-  //circle3 diagonally 
-  circle3X += circle3Speed;
-  if (circle3X >= 400 || circle3X <= 10) {
-      circle3Speed *= -1; //reverse x direction
-  }
-  circle3Y += circle3Speed;
-  if (circle3Y >= 400 || circle3Y <= 10) {
-      circle3Speed *= -1; //reverse y direction
-  }
+    //circle3 diagonally 
+    circle3X += circle3Speed;
+    if (circle3X >= 400 || circle3X <= 0) {
+        circle3Speed *= -1; //reverse x direction
+        circle3Color = color(random(255), random(255), random(255)); // Change color on hit
+    }
+    circle3Y += circle3Speed;
+    if (circle3Y >= 400 || circle3Y <= 0) {
+        circle3Speed *= -1; //reverse y direction
+        circle3Color = color(random(255), random(255), random(255)); // Change color on hit
+    }
 }
 
 //head growth
@@ -189,30 +197,30 @@ function animateHead() {
 
 //for title movement in sq. pattern
 function animateName() {
-  if (direction === 0) { 
-    nameX += stepSize;
-    if (nameX >= 400 - 150) {
-        direction = 1; 
-        changeColor();
-    }
-  } else if (direction === 1) { 
-    nameY += stepSize;
-    if (nameY >= 400 - 10) { 
-        direction = 2; 
-        changeColor();
-    }
-  } else if (direction === 2) { 
-    nameX -= stepSize;
-    if (nameX <= 10) {
-        direction = 3; 
-        changeColor();
-    }
-  } else if (direction === 3) { 
-    nameY -= stepSize;
-    if (nameY <= 30) { 
-        direction = 0; 
-        changeColor(); 
-    }
+    if (direction === 0) { 
+        nameX += stepSize;
+        if (nameX >= 400 - 150) {
+            direction = 1; 
+            changeColor();
+        }
+    } else if (direction === 1) { 
+        nameY += stepSize;
+        if (nameY >= 400 - 10) { 
+            direction = 2; 
+            changeColor();
+        }
+    } else if (direction === 2) { 
+        nameX -= stepSize;
+        if (nameX <= 10) {
+            direction = 3; 
+            changeColor();
+        }
+    } else if (direction === 3) { 
+        nameY -= stepSize;
+        if (nameY <= 30) { 
+            direction = 0; 
+            changeColor(); 
+        }
     }
 }
 
@@ -220,7 +228,7 @@ function titleSize() {
     if (isShrinking) {
         nameSize -= 0.1; //decrease size
         if (nameSize <= 5) {
-            isShrinking = false; //dtart growing back
+            isShrinking = false; //start growing back
         }
     } else {
         nameSize += 0.1; //increase size
@@ -232,5 +240,5 @@ function titleSize() {
 
 //creates new color 
 function changeColor() {
-  currentColor = color(random(255), random(255), random(255));
+    currentColor = color(random(255), random(255), random(255));
 }
